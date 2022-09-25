@@ -1,12 +1,17 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { DepartmentService } from './department.service';
 import { CreateDepartmentDto } from './dtos/create-department.dto';
 import { UpdateDepartmentDto } from './dtos/update-department.dto';
 
 @Controller('api/department')
 export class DepartmentController {
+  constructor(private departmentService: DepartmentService) {}
+
   @Post()
-  createDepartmentRoute(@Body() createDepartmentDto: CreateDepartmentDto) {
-    return 'Created';
+  async createDepartmentRoute(
+    @Body() createDepartmentDto: CreateDepartmentDto,
+  ) {
+    return this.departmentService.createDepartment(createDepartmentDto);
   }
 
   @Get()
