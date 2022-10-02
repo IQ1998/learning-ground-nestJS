@@ -1,4 +1,4 @@
-import Base from 'src/helper/base.entity';
+import Base from 'src/non-modules/helper/base.entity';
 import { Entity, Column } from 'typeorm';
 
 export enum DEPARTMENT_STATUS {

@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
+import { IlistQueryOptions } from './department.constant';
 import { DepartmentService } from './department.service';
 import { CreateDepartmentDto } from './dtos/create-department.dto';
 import { UpdateDepartmentDto } from './dtos/update-department.dto';
@@ -15,19 +26,24 @@ export class DepartmentController {
   }
 
   @Get()
-  listDepartmentRoute() {
-    return [
-      {
-        id: 1,
-        message: 'OK',
-      },
-    ];
+  listDepartmentRoute(@Query() queryOptions: IlistQueryOptions) {
+    console.log(queryOptions);
+    return this.departmentService.findMany(queryOptions);
   }
 
   @Get(':id')
-  findOneDepartmentRoute(@Param('id') id: string) {
-    return `You've just found ${id}`;
+  async findOneDepartmentRoute(@Param('id') id: string) {
+    const foundDepartment = await this.departmentService.findOne(id);
+    if (!foundDepartment) {
+      throw new HttpException(
+        'Department does not exist',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return foundDepartment;
   }
+
+  // TODO: implement Error handling with logging and correct stack trace
 
   @Put(':id')
   updateDepartmentRoute(
