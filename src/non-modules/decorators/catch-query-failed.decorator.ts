@@ -58,7 +58,7 @@ export const catchFailedQueryClass = (filePath) => {
               type: 'Failed TypeORM query',
               query: QueryFailedError.query,
               message: QueryFailedError.message,
-              failedAt: filePath,
+              failedAt: `${filePath} -- ${propertyName}`,
             },
             500,
           );
