@@ -5,6 +5,7 @@ import { IlistQueryOptions } from './department.constant';
 import Department, { DEPARTMENT_STATUS } from './department.entity';
 import { CreateDepartmentDto } from './dtos/create-department.dto';
 import { catchFailedQueryClass } from '../non-modules/decorators/catch-query-failed.decorator';
+import { UpdateDepartmentDto } from './dtos/update-department.dto';
 
 @Injectable()
 @catchFailedQueryClass(__filename)
@@ -50,7 +51,7 @@ export class DepartmentService {
       .orderBy('DEPARTMENT.createdAt', 'DESC')
       .where(
         // eslint-disable-next-line max-len
-        '(UPPER(DEPARTMENT.name) like UPPER(:name) OR UPPER(DEPARTMENT.idCode) like UPPER(:name)',
+        'UPPER(DEPARTMENT.name) like UPPER(:name) OR UPPER(DEPARTMENT.idCode) like UPPER(:name)',
         {
           name: `%${searchTerm || ''}%`,
         },
@@ -66,7 +67,22 @@ export class DepartmentService {
     };
   }
 
-  getSomeNumber() {
-    return 10;
+  async patchDepartment(
+    id: string,
+    updatePayload: UpdateDepartmentDto,
+  ): Promise<Department | null> {
+    const toBeUpdated = await this.findOne(id);
+    if (!toBeUpdated) {
+      return toBeUpdated;
+    }
+    toBeUpdated.idCode = updatePayload.idCode || toBeUpdated.idCode;
+    toBeUpdated.name = updatePayload.name || toBeUpdated.name;
+    toBeUpdated.email = updatePayload.email || toBeUpdated.email;
+    toBeUpdated.leaderEmails =
+      updatePayload.leaderEmails || toBeUpdated.leaderEmails;
+    toBeUpdated.status = updatePayload.status || toBeUpdated.status;
+
+    const saved = await this.departRepo.save(toBeUpdated);
+    return saved;
   }
 }

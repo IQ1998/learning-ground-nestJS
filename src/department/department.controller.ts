@@ -46,10 +46,20 @@ export class DepartmentController {
   // TODO: implement Error handling with logging and correct stack trace
 
   @Put(':id')
-  updateDepartmentRoute(
+  async updateDepartmentRoute(
     @Param('id') id: string,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
   ) {
-    return `This action updates a #${id} Department`;
+    const result = await this.departmentService.patchDepartment(
+      id,
+      updateDepartmentDto,
+    );
+    if (!result) {
+      throw new HttpException(
+        'Department does not exist',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return result;
   }
 }
