@@ -8,7 +8,9 @@ import {
   Post,
   Put,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
+import { ResponseSerializeInterceptor } from 'src/non-modules/interceptors/response-serialize.interceptor';
 import { IlistQueryOptions } from './department.constant';
 import { DepartmentService } from './department.service';
 import { CreateDepartmentDto } from './dtos/create-department.dto';
@@ -31,6 +33,7 @@ export class DepartmentController {
     return this.departmentService.findMany(queryOptions);
   }
 
+  @UseInterceptors(ResponseSerializeInterceptor)
   @Get(':id')
   async findOneDepartmentRoute(@Param('id') id: string) {
     const foundDepartment = await this.departmentService.findOne(id);
@@ -42,8 +45,6 @@ export class DepartmentController {
     }
     return foundDepartment;
   }
-
-  // TODO: implement Error handling with logging and correct stack trace
 
   @Put(':id')
   async updateDepartmentRoute(
