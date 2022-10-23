@@ -2,7 +2,6 @@ import {
   IsArray,
   IsEmail,
   IsEnum,
-  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
