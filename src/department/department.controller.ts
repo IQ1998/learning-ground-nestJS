@@ -14,6 +14,7 @@ import { ResponseSerializeInterceptor } from 'src/non-modules/interceptors/respo
 import { IlistQueryOptions } from './department.constant';
 import { DepartmentService } from './department.service';
 import { CreateDepartmentDto } from './dtos/create-department.dto';
+import { OutgoingDepartmentDto } from './dtos/outgoing-department.dto';
 import { UpdateDepartmentDto } from './dtos/update-department.dto';
 
 @Controller('api/department')
@@ -33,7 +34,7 @@ export class DepartmentController {
     return this.departmentService.findMany(queryOptions);
   }
 
-  @UseInterceptors(ResponseSerializeInterceptor)
+  @UseInterceptors(new ResponseSerializeInterceptor(OutgoingDepartmentDto))
   @Get(':id')
   async findOneDepartmentRoute(@Param('id') id: string) {
     const foundDepartment = await this.departmentService.findOne(id);
