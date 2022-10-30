@@ -71,3 +71,12 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## Commands to create a new module
+
+```bash
+# No repository because we are using TypeORM
+nest generate module account/account --flat && \
+nest generate controller account/account --flat && \
+nest generate service account/account --flat
+```

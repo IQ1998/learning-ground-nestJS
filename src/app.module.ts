@@ -10,6 +10,8 @@ import { AppService } from './app.service';
 import Department from './department/department.entity';
 import { DepartmentModule } from './department/department.module';
 import { parseReqQuery } from './non-modules/middlewares/parseReqQuery.middleware';
+import { AccountModule } from './account/account.module';
+import Account from './account/account.entity';
 
 @Module({
   imports: [
@@ -17,10 +19,11 @@ import { parseReqQuery } from './non-modules/middlewares/parseReqQuery.middlewar
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db.sqlite',
-      entities: [Department],
+      entities: [Department, Account],
       synchronize: true,
       // logging: true,
     }),
+    AccountModule,
   ],
   controllers: [AppController],
   providers: [AppService],
