@@ -9,6 +9,7 @@ async function bootstrap() {
       disableErrorMessages: false,
       enableDebugMessages: true,
       whitelist: true,
+      forbidUnknownValues: true,
     }),
   );
   await app.listen(3000);

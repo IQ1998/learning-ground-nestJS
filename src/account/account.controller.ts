@@ -9,7 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { IlistQueryOptions } from './account.constant';
+import { IlistQueryOptions, LOGIN_RESULT } from './account.constant';
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dtos/create-account.dto';
 import { LoginDto } from './dtos/login.dto';
@@ -29,10 +29,25 @@ export class AccountController {
     return this.accountService.createAcc(body);
   }
 
-  // @Post()
-  // login(@Body() body: LoginDto) {
-  //   return this.accountService.login(body);
-  // }
+  @Post('/login')
+  async login(@Body() body: LoginDto) {
+    const loginResult = await this.accountService.login(body);
+    // For security reason, we will not disclose the reason for failing
+    // it also makes less code
+    switch (loginResult) {
+      case LOGIN_RESULT.INACTIVE:
+        throw new HttpException('Account is locked', HttpStatus.UNAUTHORIZED);
+      case LOGIN_RESULT.SUCCESS:
+        return {
+          ok: 1,
+        };
+      default:
+        throw new HttpException(
+          'Username or password is incorrect',
+          HttpStatus.BAD_REQUEST,
+        );
+    }
+  }
 
   @Get()
   listDepartmentRoute(@Query() queryOptions: IlistQueryOptions) {

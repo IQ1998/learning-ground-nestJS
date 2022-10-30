@@ -6,8 +6,13 @@ import { Repository } from 'typeorm';
 import Account from './account.entity';
 import { CreateAccountDto } from './dtos/create-account.dto';
 import { UpdateAccounttDto } from './dtos/update-account.dto';
-import { ACCOUNT_STATUS, IlistQueryOptions } from './account.constant';
+import {
+  ACCOUNT_STATUS,
+  IlistQueryOptions,
+  LOGIN_RESULT,
+} from './account.constant';
 import { catchFailedQueryClass } from 'src/non-modules/decorators/catch-query-failed.decorator';
+import { LoginDto } from './dtos/login.dto';
 
 @Injectable()
 @catchFailedQueryClass(__filename)
@@ -17,7 +22,7 @@ export class AccountService {
     private accountRepo: Repository<Account>,
   ) {}
 
-  async hashPassword(toBeHashed: string): Promise<string> {
+  private async hashPassword(toBeHashed: string): Promise<string> {
     const hashed = await argon2.hash(toBeHashed, {
       hashLength: 64,
       timeCost: 2,
@@ -88,10 +93,6 @@ export class AccountService {
     id: string,
     updatePayload: UpdateAccounttDto,
   ): Promise<Account | null> {
-    console.log(
-      '🚀 ~ file: account.service.ts ~ line 91 ~ AccountService ~ updatePayload',
-      updatePayload,
-    );
     const toBeUpdated = await this.findOne(id);
     if (!toBeUpdated) {
       return toBeUpdated;
@@ -99,5 +100,21 @@ export class AccountService {
     updater.updatePatchStyle(toBeUpdated, updatePayload);
     const saved = await this.accountRepo.save(toBeUpdated);
     return saved;
+  }
+
+  // Just a basic login function, will implement with cookies later
+  async login(payload: LoginDto): Promise<LOGIN_RESULT> {
+    const thisUser = await this.accountRepo.findOne({
+      where: {
+        userName: payload.userName,
+      },
+    });
+    if (!thisUser) {
+      return LOGIN_RESULT.NOT_FOUND;
+    }
+    if (thisUser.status === ACCOUNT_STATUS.INACTIVE) {
+      return LOGIN_RESULT.INACTIVE;
+    }
+    return LOGIN_RESULT.SUCCESS;
   }
 }
