@@ -1,5 +1,6 @@
+import Department from 'src/department/department.entity';
 import Base from 'src/non-modules/helper/base.entity';
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { ACCOUNT_STATUS } from './account.constant';
 
 @Entity('ACCOUNT')
@@ -21,6 +22,8 @@ export default class Account extends Base {
   fullName: string;
 
   // The unit to which thiz account belongs
+  // If null it means this account does not belong to any department
+  // Maybe it is because that department has been deleted
   @Column({
     type: 'nvarchar',
     default: null,
@@ -46,4 +49,10 @@ export default class Account extends Base {
     default: ACCOUNT_STATUS.ACTIVE,
   })
   status: string;
+
+  @ManyToOne(() => Department, (department) => department.accounts, {
+    onDelete: 'SET NULL',
+    onUpdate: 'RESTRICT',
+  })
+  fromUnit: Department;
 }

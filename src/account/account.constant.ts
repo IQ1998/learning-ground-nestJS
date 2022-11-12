@@ -17,3 +17,20 @@ export enum LOGIN_RESULT {
   // LOCKED OR OTHER KIND OF NOT ALLOW TO LOGIN
   INACTIVE = 'NOT_ALLOWED_INACTIVE',
 }
+
+export interface ISessionPayload {
+  id: string;
+  userName: string;
+  ldapId?: string | null;
+  fullName: string;
+  roleId?: string | null;
+  fromUnit: {
+    id: string;
+    idCode: string;
+    name: string;
+  };
+  expiredAt: Date;
+}
+
+// This should be in an ENV variable
+export const cookieKey = 'zVHm8Wq8OXoc227AfmS8';

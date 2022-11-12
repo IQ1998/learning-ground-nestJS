@@ -9,10 +9,12 @@ import { UpdateAccounttDto } from './dtos/update-account.dto';
 import {
   ACCOUNT_STATUS,
   IlistQueryOptions,
+  ISessionPayload,
   LOGIN_RESULT,
 } from './account.constant';
 import { catchFailedQueryClass } from 'src/non-modules/decorators/catch-query-failed.decorator';
 import { LoginDto } from './dtos/login.dto';
+import appConfigs from 'src/non-modules/helper/configs';
 
 @Injectable()
 @catchFailedQueryClass(__filename)
@@ -53,6 +55,7 @@ export class AccountService {
       where: {
         id,
       },
+      relations: ['fromUnit'],
     });
   }
 
@@ -102,19 +105,60 @@ export class AccountService {
     return saved;
   }
 
-  // Just a basic login function, will implement with cookies later
-  async login(payload: LoginDto): Promise<LOGIN_RESULT> {
+  async login(payload: LoginDto): Promise<{
+    result: LOGIN_RESULT;
+    sessionInfo: { key: string; payload: ISessionPayload } | null;
+  }> {
     const thisUser = await this.accountRepo.findOne({
       where: {
         userName: payload.userName,
       },
+      relations: ['fromUnit'],
     });
     if (!thisUser) {
-      return LOGIN_RESULT.NOT_FOUND;
+      return { result: LOGIN_RESULT.NOT_FOUND, sessionInfo: null };
     }
     if (thisUser.status === ACCOUNT_STATUS.INACTIVE) {
-      return LOGIN_RESULT.INACTIVE;
+      return { result: LOGIN_RESULT.INACTIVE, sessionInfo: null };
     }
-    return LOGIN_RESULT.SUCCESS;
+
+    const isCorrectPassword = await argon2.verify(
+      thisUser.password,
+      payload.password,
+    );
+
+    if (!isCorrectPassword) {
+      return { result: LOGIN_RESULT.WRONG_PASSWORD, sessionInfo: null };
+    }
+
+    const sessionPayload: ISessionPayload = {
+      id: thisUser.id,
+      userName: thisUser.userName,
+      ldapId: thisUser.ldapID,
+      fullName: thisUser.fullName,
+      roleId: thisUser.roleId,
+      fromUnit: {
+        id: thisUser.fromUnitId,
+        idCode: thisUser.fromUnitId ? thisUser.fromUnit.idCode : '',
+        name: thisUser.fromUnitId ? thisUser.fromUnit.name : '',
+      },
+      expiredAt: new Date(Date.now() + appConfigs.sessionExpire),
+    };
+
+    const sessionKey = (
+      await argon2.hash(thisUser.id, {
+        hashLength: 16,
+        timeCost: 2,
+        raw: true,
+      })
+    ).toString('base64');
+
+    return {
+      result: LOGIN_RESULT.SUCCESS,
+      sessionInfo: {
+        key: sessionKey,
+        payload: sessionPayload,
+      },
+    };
   }
 }

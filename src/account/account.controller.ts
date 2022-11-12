@@ -8,17 +8,18 @@ import {
   Patch,
   Post,
   Query,
+  Request,
+  Res,
 } from '@nestjs/common';
-import { IlistQueryOptions, LOGIN_RESULT } from './account.constant';
+import { Response } from 'express';
+import { cookieKey, IlistQueryOptions, LOGIN_RESULT } from './account.constant';
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dtos/create-account.dto';
 import { LoginDto } from './dtos/login.dto';
 import { UpdateAccounttDto } from './dtos/update-account.dto';
-
-// TODO:
-// make sure account work
-// create relation ship between account and department
-// Move ACCOUNT_STATUS to account.constant
+import appSession from '../non-modules/helper/session';
+import appConfigs from 'src/non-modules/helper/configs';
+import { CustomRequest } from 'src/non-modules/typing/class.typing';
 
 @Controller('api/account')
 export class AccountController {
@@ -29,18 +30,29 @@ export class AccountController {
     return this.accountService.createAcc(body);
   }
 
+  // TODO: finish cookie flow
+
   @Post('/login')
-  async login(@Body() body: LoginDto) {
+  async login(@Body() body: LoginDto, @Res() res: Response) {
     const loginResult = await this.accountService.login(body);
     // For security reason, we will not disclose the reason for failing
     // it also makes less code
-    switch (loginResult) {
+    switch (loginResult.result) {
       case LOGIN_RESULT.INACTIVE:
         throw new HttpException('Account is locked', HttpStatus.UNAUTHORIZED);
       case LOGIN_RESULT.SUCCESS:
-        return {
+        const { key, payload } = loginResult.sessionInfo;
+        appSession.setSession(key, payload);
+        res.cookie(cookieKey, key, {
+          // ENV
+          // expires: new Date(Date.now() + appConfigs.sessionExpire),
+          expires: new Date(Date.now() + 3000),
+          // Client cannot access cookie through client side script
+          httpOnly: true,
+        });
+        return res.status(200).json({
           ok: 1,
-        };
+        });
       default:
         throw new HttpException(
           'Username or password is incorrect',
@@ -68,6 +80,7 @@ export class AccountController {
   async updateDepartmentRoute(
     @Param('id') id: string,
     @Body() UpdateAccounttDto: UpdateAccounttDto,
+    @Request() req: CustomRequest,
   ) {
     const result = await this.accountService.patchAccount(
       id,
@@ -76,6 +89,9 @@ export class AccountController {
     if (!result) {
       throw new HttpException('Account does not exist', HttpStatus.NOT_FOUND);
     }
-    return result;
+    return {
+      ...result,
+      justUpdatedBy: req.session.fullName + ' HAHAHAHAHAHAHAHA',
+    };
   }
 }

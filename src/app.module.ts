@@ -12,6 +12,7 @@ import { DepartmentModule } from './department/department.module';
 import { parseReqQuery } from './non-modules/middlewares/parseReqQuery.middleware';
 import { AccountModule } from './account/account.module';
 import Account from './account/account.entity';
+import { isAuthenticated } from './non-modules/middlewares/auth.middleware';
 
 @Module({
   imports: [
@@ -30,6 +31,10 @@ import Account from './account/account.entity';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    consumer.apply(isAuthenticated).forRoutes({
+      method: RequestMethod.PATCH,
+      path: '*account*',
+    });
     consumer.apply(parseReqQuery).forRoutes({
       method: RequestMethod.GET,
       path: '*',
