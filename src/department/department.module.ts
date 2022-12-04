@@ -8,5 +8,6 @@ import { DepartmentService } from './department.service';
   controllers: [DepartmentController],
   providers: [DepartmentService],
   imports: [TypeOrmModule.forFeature([Department])],
+  exports: [DepartmentService],
 })
 export class DepartmentModule {}

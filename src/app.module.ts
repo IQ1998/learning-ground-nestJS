@@ -13,6 +13,10 @@ import { parseReqQuery } from './non-modules/middlewares/parseReqQuery.middlewar
 import { AccountModule } from './account/account.module';
 import Account from './account/account.entity';
 import { isAuthenticated } from './non-modules/middlewares/auth.middleware';
+import { RegisPeriodModule } from './regis-period/regis-period.module';
+import { DepartmentRegisModule } from './department-regis/department-regis.module';
+import RegisPeriod from './regis-period/regis-period.entity';
+import DepartmentRegis from './department-regis/department-regis.entity';
 
 @Module({
   imports: [
@@ -20,11 +24,13 @@ import { isAuthenticated } from './non-modules/middlewares/auth.middleware';
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db.sqlite',
-      entities: [Department, Account],
+      entities: [Department, Account, RegisPeriod, DepartmentRegis],
       synchronize: true,
-      // logging: true,
+      logging: true,
     }),
     AccountModule,
+    RegisPeriodModule,
+    DepartmentRegisModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -16,7 +16,7 @@ export class CreateAccountDto {
   fullName: string;
 
   @IsString()
-  fromUnitId: string;
+  fromDepartmentId: string;
 
   @IsString()
   @IsOptional()

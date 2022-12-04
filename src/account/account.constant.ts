@@ -24,7 +24,7 @@ export interface ISessionPayload {
   ldapId?: string | null;
   fullName: string;
   roleId?: string | null;
-  fromUnit: {
+  fromDepartment: {
     id: string;
     idCode: string;
     name: string;

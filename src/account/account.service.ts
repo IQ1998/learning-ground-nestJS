@@ -14,7 +14,7 @@ import {
 } from './account.constant';
 import { catchFailedQueryClass } from 'src/non-modules/decorators/catch-query-failed.decorator';
 import { LoginDto } from './dtos/login.dto';
-import appConfigs from 'src/non-modules/helper/configs';
+import appConfigs from '../non-modules/helper/configs';
 
 @Injectable()
 @catchFailedQueryClass(__filename)
@@ -39,7 +39,7 @@ export class AccountService {
       ldapID: payload.ldapID,
       password: hashedPassword,
       fullName: payload.fullName,
-      fromUnitId: payload.fromUnitId,
+      fromDepartmentId: payload.fromDepartmentId,
       avatar: payload.avatar,
       roleId: payload.roleId,
       status: payload.status || ACCOUNT_STATUS.ACTIVE,
@@ -55,7 +55,7 @@ export class AccountService {
       where: {
         id,
       },
-      relations: ['fromUnit'],
+      relations: ['fromDepartment'],
     });
   }
 
@@ -113,7 +113,7 @@ export class AccountService {
       where: {
         userName: payload.userName,
       },
-      relations: ['fromUnit'],
+      relations: ['fromDepartment'],
     });
     if (!thisUser) {
       return { result: LOGIN_RESULT.NOT_FOUND, sessionInfo: null };
@@ -137,10 +137,10 @@ export class AccountService {
       ldapId: thisUser.ldapID,
       fullName: thisUser.fullName,
       roleId: thisUser.roleId,
-      fromUnit: {
-        id: thisUser.fromUnitId,
-        idCode: thisUser.fromUnitId ? thisUser.fromUnit.idCode : '',
-        name: thisUser.fromUnitId ? thisUser.fromUnit.name : '',
+      fromDepartment: {
+        id: thisUser.fromDepartmentId,
+        idCode: thisUser.fromDepartmentId ? thisUser.fromDepartment.idCode : '',
+        name: thisUser.fromDepartmentId ? thisUser.fromDepartment.name : '',
       },
       expiredAt: new Date(Date.now() + appConfigs.sessionExpire),
     };

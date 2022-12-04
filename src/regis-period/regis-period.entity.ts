@@ -1,5 +1,6 @@
 import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import Base from '../non-modules/helper/base.entity';
+import DepartmentRegis from '../department-regis/department-regis.entity';
 
 @Entity('REGIS_PERIOD')
 export default class RegisPeriod extends Base {
@@ -24,4 +25,10 @@ export default class RegisPeriod extends Base {
     nullable: true,
   })
   expenseListId: string;
+
+  @OneToMany(
+    () => DepartmentRegis,
+    (departmentRegis) => departmentRegis.regisPeriod,
+  )
+  departmentRegiss: DepartmentRegis[];
 }

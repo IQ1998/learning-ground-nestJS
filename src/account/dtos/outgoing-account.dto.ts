@@ -13,7 +13,7 @@ export class OutgoingAccountDto {
   @Expose()
   fullName: string;
   @Expose()
-  fromUnitId: string;
+  fromDepartmentId: string;
   @Expose()
   avatar: string;
   @Expose()

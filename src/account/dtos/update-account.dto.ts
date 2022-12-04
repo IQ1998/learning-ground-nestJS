@@ -18,7 +18,7 @@ export class UpdateAccounttDto {
 
   @IsString()
   @IsOptional()
-  fromUnitId: string;
+  fromDepartmentId: string;
 
   @IsString()
   @IsOptional()

@@ -1,6 +1,7 @@
 import Account from 'src/account/account.entity';
-import Base from 'src/non-modules/helper/base.entity';
-import { Entity, Column, OneToMany } from 'typeorm';
+import Base from '../non-modules/helper/base.entity';
+import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
+import DepartmentRegis from '../department-regis/department-regis.entity';
 
 export enum DEPARTMENT_STATUS {
   ACTIVE = 'ACTIVE',
@@ -37,6 +38,12 @@ export default class Department extends Base {
   })
   status: string;
 
-  @OneToMany(() => Account, (account) => account.fromUnit)
+  @OneToMany(() => Account, (account) => account.fromDepartment)
   accounts: Account[];
+
+  @OneToMany(
+    () => DepartmentRegis,
+    (departmentRegis) => departmentRegis.fromDepartment,
+  )
+  departmentRegiss: DepartmentRegis[];
 }

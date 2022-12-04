@@ -1,6 +1,6 @@
 import Department from 'src/department/department.entity';
 import Base from 'src/non-modules/helper/base.entity';
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { ACCOUNT_STATUS } from './account.constant';
 
 @Entity('ACCOUNT')
@@ -29,7 +29,7 @@ export default class Account extends Base {
     default: null,
     nullable: true,
   })
-  fromUnitId: string;
+  fromDepartmentId: string;
 
   @Column({
     type: 'nvarchar',
@@ -54,5 +54,6 @@ export default class Account extends Base {
     onDelete: 'SET NULL',
     onUpdate: 'RESTRICT',
   })
-  fromUnit: Department;
+  @JoinColumn({ name: 'fromDepartmentId' })
+  fromDepartment: Department;
 }
