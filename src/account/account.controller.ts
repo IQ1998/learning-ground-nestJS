@@ -18,8 +18,7 @@ import { CreateAccountDto } from './dtos/create-account.dto';
 import { LoginDto } from './dtos/login.dto';
 import { UpdateAccounttDto } from './dtos/update-account.dto';
 import appSession from '../non-modules/helper/session';
-import appConfigs from 'src/non-modules/helper/configs';
-import { CustomRequest } from 'src/non-modules/typing/class.typing';
+import { CustomRequest } from '../non-modules/typing/class.typing';
 
 @Controller('api/account')
 export class AccountController {

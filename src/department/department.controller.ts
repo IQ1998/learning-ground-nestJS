@@ -10,7 +10,7 @@ import {
   Query,
   UseInterceptors,
 } from '@nestjs/common';
-import { ResponseSerializeInterceptor } from 'src/non-modules/interceptors/response-serialize.interceptor';
+import { ResponseSerializeInterceptor } from '../non-modules/interceptors/response-serialize.interceptor';
 import { IlistQueryOptions } from './department.constant';
 import { DepartmentService } from './department.service';
 import { CreateDepartmentDto } from './dtos/create-department.dto';

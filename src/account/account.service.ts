@@ -12,7 +12,7 @@ import {
   ISessionPayload,
   LOGIN_RESULT,
 } from './account.constant';
-import { catchFailedQueryClass } from 'src/non-modules/decorators/catch-query-failed.decorator';
+import { catchFailedQueryClass } from '../non-modules/decorators/catch-query-failed.decorator';
 import { LoginDto } from './dtos/login.dto';
 import appConfigs from '../non-modules/helper/configs';
 

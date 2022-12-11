@@ -9,7 +9,7 @@ import { IlistQueryOptions } from './department-regis.constant';
 import DepartmentRegis from './department-regis.entity';
 import { CreateDepartmentRegisDto } from './dtos/create-department-regis.dto';
 import { UpdateDepartmentRegisDto } from './dtos/update-department-regis.dto';
-import { DepartmentService } from 'src/department/department.service';
+import { DepartmentService } from '../department/department.service';
 
 @Injectable()
 @catchFailedQueryClass(__filename)

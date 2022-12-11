@@ -1,5 +1,5 @@
-import Department from 'src/department/department.entity';
-import Base from 'src/non-modules/helper/base.entity';
+import Department from '../department/department.entity';
+import Base from '../non-modules/helper/base.entity';
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { ACCOUNT_STATUS } from './account.constant';
 
