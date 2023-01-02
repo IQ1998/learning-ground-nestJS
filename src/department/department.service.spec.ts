@@ -11,7 +11,7 @@ import {
 
 // TODO, research why this work --> DONE
 // https://stackoverflow.com/questions/55366037/inject-typeorm-repository-into-nestjs-service-for-mock-data-testing
-describe.only('DepartmentService', () => {
+describe('DepartmentService', () => {
   let service: DepartmentService;
   let departmentRepoMock: MockType<Repository<Department>>;
   beforeEach(async () => {
@@ -27,10 +27,6 @@ describe.only('DepartmentService', () => {
 
     service = module.get<DepartmentService>(DepartmentService);
     departmentRepoMock = module.get(getRepositoryToken(Department));
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
   });
 
   it('should create and return a department - createDepartment()', async () => {

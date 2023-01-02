@@ -138,9 +138,11 @@ export class AccountService {
       fullName: thisUser.fullName,
       roleId: thisUser.roleId,
       fromDepartment: {
-        id: thisUser.fromDepartmentId,
-        idCode: thisUser.fromDepartmentId ? thisUser.fromDepartment.idCode : '',
-        name: thisUser.fromDepartmentId ? thisUser.fromDepartment.name : '',
+        id: thisUser.fromDepartment.id,
+        idCode: thisUser.fromDepartment.idCode
+          ? thisUser.fromDepartment.idCode
+          : '',
+        name: thisUser.fromDepartment.name ? thisUser.fromDepartment.name : '',
       },
       expiredAt: new Date(Date.now() + appConfigs.sessionExpire),
     };
