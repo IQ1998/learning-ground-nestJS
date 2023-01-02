@@ -1,4 +1,4 @@
-import { ISessionPayload } from '../account/account.constant';
+import { ISessionPayload } from '../../account/account.constant';
 
 class AppSession {
   private session: Record<string, ISessionPayload>;

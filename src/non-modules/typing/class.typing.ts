@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { ISessionPayload } from '../account/account.constant';
+import { ISessionPayload } from '../../account/account.constant';
 export interface ClassType extends Function {
   new (...args: any[]): any;
 }
