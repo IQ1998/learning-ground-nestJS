@@ -8,8 +8,10 @@ import {
   Post,
   Put,
   Query,
+  UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
+import { FailedQueryExceptionFilter } from '../non-modules/helper/failed-query-exception.filter';
 import { ResponseSerializeInterceptor } from '../non-modules/interceptors/response-serialize.interceptor';
 import { IlistQueryOptions } from './department.constant';
 import { DepartmentService } from './department.service';
@@ -18,6 +20,7 @@ import { OutgoingDepartmentDto } from './dtos/outgoing-department.dto';
 import { UpdateDepartmentDto } from './dtos/update-department.dto';
 
 @Controller('api/department')
+@UseFilters(new FailedQueryExceptionFilter())
 export class DepartmentController {
   constructor(private departmentService: DepartmentService) {}
 
@@ -30,7 +33,6 @@ export class DepartmentController {
 
   @Get()
   listDepartmentRoute(@Query() queryOptions: IlistQueryOptions) {
-    console.log(queryOptions);
     return this.departmentService.findMany(queryOptions);
   }
 

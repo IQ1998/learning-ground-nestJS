@@ -1,5 +1,5 @@
 import { HttpException } from '@nestjs/common';
-import { QueryFailedError } from 'typeorm';
+import { FailedQueryException } from '../customExceptions/failed-query.exception';
 
 export const catchFailedQuery = (currentFilePath) => {
   return function (
@@ -13,17 +13,23 @@ export const catchFailedQuery = (currentFilePath) => {
         const result = await actualFunction.apply(this, args);
         return result;
       } catch (QueryFailedError) {
-        const exception = new HttpException(
-          {
-            type: 'Failed TypeORM query',
-            query: QueryFailedError.query,
-            message: QueryFailedError.message,
-            failedAt: currentFilePath,
-          },
-          500,
+        console.log(
+          '🚀 ~ file: catch-query-failed.decorator.ts:16 ~ QueryFailedError',
+          QueryFailedError,
         );
-        console.log(exception);
-        throw exception;
+        if (typeof QueryFailedError.query === 'string') {
+          console.log(
+            '🚀 ~ file: catch-query-failed.decorator.ts:24 ~ thrown here',
+          );
+
+          throw new FailedQueryException({
+            code: QueryFailedError.code || 'SQL Error',
+            query: QueryFailedError.query || '',
+            message: QueryFailedError.message || '',
+            failedAt: currentFilePath,
+          });
+        }
+        throw QueryFailedError;
       }
     };
     return descriptor;
@@ -53,17 +59,16 @@ export const catchFailedQueryClass = (filePath) => {
           const result = await originalMethod.apply(this, args);
           return result;
         } catch (QueryFailedError) {
-          const exception = new HttpException(
-            {
-              code: QueryFailedError.code || 'Failed TypeORM query',
-              query: QueryFailedError.query,
-              message: QueryFailedError.message,
+          if (typeof QueryFailedError.query === 'string') {
+            throw new FailedQueryException({
+              code: QueryFailedError.code || 'SQL Error',
+              query: QueryFailedError.query || '',
+              message: QueryFailedError.message || '',
               failedAt: `${filePath} -- ${propertyName}`,
-            },
-            500,
-          );
-          console.log(exception);
-          throw exception;
+            });
+          }
+
+          throw QueryFailedError;
         }
       };
       Object.defineProperty(target.prototype, propertyName, descriptor);

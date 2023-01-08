@@ -15,7 +15,8 @@ const givenFollowingAccountExist = (app: INestApplication, payload) =>
           reject(res.error);
         }
         resolve(res);
-      });
+      })
+      .catch((err) => reject(err));
   });
 
 export default {
