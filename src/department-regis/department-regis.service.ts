@@ -130,10 +130,6 @@ export class DepartmentRegisService {
       year = new Date().getFullYear(),
       status,
     } = queryOptions;
-    console.log(
-      '🚀 ~ file: department-regis.service.ts ~ line 133 ~ DepartmentRegisService ~ status',
-      status,
-    );
 
     const list = await this.departmentRepo
       .createQueryBuilder('DEPARTMENT')

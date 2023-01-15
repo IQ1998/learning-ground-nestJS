@@ -45,7 +45,7 @@ export class AccountController {
         res.cookie(cookieKey, key, {
           // ENV
           // expires: new Date(Date.now() + appConfigs.sessionExpire),
-          expires: new Date(Date.now() + 3000),
+          expires: new Date(Date.now() + 30000),
           // Client cannot access cookie through client side script
           httpOnly: true,
         });
@@ -62,7 +62,6 @@ export class AccountController {
 
   @Get()
   listDepartmentRoute(@Query() queryOptions: IlistQueryOptions) {
-    console.log(queryOptions);
     return this.accountService.findMany(queryOptions);
   }
 

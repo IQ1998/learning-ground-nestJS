@@ -31,56 +31,56 @@ describe.only('Authentication flow (e2e)', () => {
   });
 
   it('/account/login (POST)', async () => {
-    // // Wrong password
-    // const response = await request(app.getHttpServer())
-    //   .post('/api/account/login')
-    //   .send({
-    //     userName: 'IQ1998',
-    //     password: 'deptrai1234',
-    //   })
-    //   .set('Accept', 'application/json')
-    //   .set('ContentType', 'application/json')
-    //   .expect('Content-Type', /json/);
-    // expect(response.status).toEqual(400);
-    // expect(response.body.message).toBeDefined();
-    // expect(response.body.message).toEqual('Username or password is incorrect');
-    // // Non existent user
-    // const response2 = await request(app.getHttpServer())
-    //   .post('/api/account/login')
-    //   .send({
-    //     userName: 'wakandaaaaahhhhggggg',
-    //     password: 'deptrai1234',
-    //   })
-    //   .set('Accept', 'application/json')
-    //   .set('ContentType', 'application/json')
-    //   .expect('Content-Type', /json/);
-    // expect(response2.body).toEqual({
-    //   statusCode: 400,
-    //   message: 'Username or password is incorrect',
-    // });
-    // // Inactive user
-    // await dataPreparerAccount.givenFollowingAccountExist(app, {
-    //   userName: 'IQ000',
-    //   ldapID: 'iq000@andeptrai.com',
-    //   password: 'deptrai123',
-    //   fullName: 'An HanSung Inactive',
-    //   fromDepartmentId: 'b79398c6-bed9-43dc-9ffc-629c93a7dd17',
-    //   status: ACCOUNT_STATUS.INACTIVE,
-    // });
+    // Wrong password
+    const response = await request(app.getHttpServer())
+      .post('/api/account/login')
+      .send({
+        userName: 'IQ1998',
+        password: 'deptrai1234',
+      })
+      .set('Accept', 'application/json')
+      .set('ContentType', 'application/json')
+      .expect('Content-Type', /json/);
+    expect(response.status).toEqual(400);
+    expect(response.body.message).toBeDefined();
+    expect(response.body.message).toEqual('Username or password is incorrect');
+    // Non existent user
+    const response2 = await request(app.getHttpServer())
+      .post('/api/account/login')
+      .send({
+        userName: 'wakandaaaaahhhhggggg',
+        password: 'deptrai1234',
+      })
+      .set('Accept', 'application/json')
+      .set('ContentType', 'application/json')
+      .expect('Content-Type', /json/);
+    expect(response2.body).toEqual({
+      statusCode: 400,
+      message: 'Username or password is incorrect',
+    });
+    // Inactive user
+    await dataPreparerAccount.givenFollowingAccountExist(app, {
+      userName: 'IQ000',
+      ldapID: 'iq000@andeptrai.com',
+      password: 'deptrai123',
+      fullName: 'An HanSung Inactive',
+      fromDepartmentId: 'b79398c6-bed9-43dc-9ffc-629c93a7dd17',
+      status: ACCOUNT_STATUS.INACTIVE,
+    });
 
-    // const response3 = await request(app.getHttpServer())
-    //   .post('/api/account/login')
-    //   .send({
-    //     userName: 'IQ000',
-    //     password: 'deptrai123',
-    //   })
-    //   .set('Accept', 'application/json')
-    //   .set('ContentType', 'application/json')
-    //   .expect('Content-Type', /json/);
-    // expect(response3.body).toEqual({
-    //   statusCode: 401,
-    //   message: 'Account is locked',
-    // });
+    const response3 = await request(app.getHttpServer())
+      .post('/api/account/login')
+      .send({
+        userName: 'IQ000',
+        password: 'deptrai123',
+      })
+      .set('Accept', 'application/json')
+      .set('ContentType', 'application/json')
+      .expect('Content-Type', /json/);
+    expect(response3.body).toEqual({
+      statusCode: 401,
+      message: 'Account is locked',
+    });
 
     const response4 = await request(app.getHttpServer())
       .post('/api/account/login')
