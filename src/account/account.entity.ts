@@ -2,6 +2,7 @@ import Department from '../department/department.entity';
 import Base from '../non-modules/helper/base.entity';
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { ACCOUNT_STATUS } from './account.constant';
+import Role from '../role/role.entity';
 
 @Entity('ACCOUNT')
 export default class Account extends Base {
@@ -56,4 +57,7 @@ export default class Account extends Base {
   })
   @JoinColumn({ name: 'fromDepartmentId' })
   fromDepartment: Department;
+
+  @ManyToOne(() => Role, (role) => role.accounts)
+  role: Role;
 }

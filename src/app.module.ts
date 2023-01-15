@@ -15,8 +15,10 @@ import Account from './account/account.entity';
 import { isAuthenticated } from './non-modules/middlewares/auth.middleware';
 import { RegisPeriodModule } from './regis-period/regis-period.module';
 import { DepartmentRegisModule } from './department-regis/department-regis.module';
+import { RoleModule } from './role/role.module';
 import RegisPeriod from './regis-period/regis-period.entity';
 import DepartmentRegis from './department-regis/department-regis.entity';
+import Role from './role/role.entity';
 
 @Module({
   imports: [
@@ -24,23 +26,30 @@ import DepartmentRegis from './department-regis/department-regis.entity';
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db.sqlite',
-      entities: [Department, Account, RegisPeriod, DepartmentRegis],
+      entities: [Department, Account, RegisPeriod, DepartmentRegis, Role],
       synchronize: true,
       logging: true,
     }),
     AccountModule,
     RegisPeriodModule,
     DepartmentRegisModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(isAuthenticated).forRoutes({
-      method: RequestMethod.PATCH,
-      path: '*account*',
-    });
+    consumer.apply(isAuthenticated).forRoutes(
+      {
+        method: RequestMethod.PATCH,
+        path: '*account*',
+      },
+      {
+        method: RequestMethod.ALL,
+        path: '*departmentRegis*',
+      },
+    );
     consumer.apply(parseReqQuery).forRoutes({
       method: RequestMethod.GET,
       path: '*',

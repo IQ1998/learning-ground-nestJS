@@ -8,17 +8,22 @@ import {
   Post,
   Put,
   Query,
+  SetMetadata,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateDepartmentRegisDto } from './dtos/create-department-regis.dto';
 import { UpdateDepartmentRegisDto } from './dtos/update-department-regis.dto';
 import { IlistQueryOptions } from './department-regis.constant';
 import { DepartmentRegisService } from './department-regis.service';
+import { RoleCode, RoleGuard, RoleKey } from '../role/role.guard';
 
 @Controller('api/departmentRegis')
+@UseGuards(RoleGuard)
 export class DepartmentRegisController {
   constructor(private departmentRegisService: DepartmentRegisService) {}
 
   @Post()
+  @SetMetadata(RoleKey, [RoleCode.admin])
   async createDepartmentRegisRoute(
     @Body() createDepartmentRegisDto: CreateDepartmentRegisDto,
   ) {
