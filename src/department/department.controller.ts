@@ -20,7 +20,9 @@ import { OutgoingDepartmentDto } from './dtos/outgoing-department.dto';
 import { UpdateDepartmentDto } from './dtos/update-department.dto';
 
 @Controller('api/department')
-@UseFilters(new FailedQueryExceptionFilter())
+// Controller scoped filter, can be set as global filter,
+// but I leave it here for demonstrate purpose
+@UseFilters(FailedQueryExceptionFilter)
 export class DepartmentController {
   constructor(private departmentService: DepartmentService) {}
 

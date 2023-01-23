@@ -9,7 +9,6 @@ import {
 import { AccountService } from './account.service';
 import Account from './account.entity';
 import { ACCOUNT_STATUS, LOGIN_RESULT } from './account.constant';
-import appConfigs from '../non-modules/helper/configs';
 
 describe('AccountService', () => {
   let service: AccountService;
@@ -84,7 +83,7 @@ describe('AccountService', () => {
           idCode: mockValue.fromDepartment.idCode,
           name: mockValue.fromDepartment.name,
         },
-        expiredAt: new Date(dateNow + appConfigs.sessionExpire),
+        expiredAt: new Date(dateNow + 60000),
       });
     });
 

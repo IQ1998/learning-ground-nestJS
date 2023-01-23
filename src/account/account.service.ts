@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as argon2 from 'argon2';
 import updater from '../non-modules/helper/updater';
@@ -14,7 +14,10 @@ import {
 } from './account.constant';
 import { catchFailedQueryClass } from '../non-modules/decorators/catch-query-failed.decorator';
 import { LoginDto } from './dtos/login.dto';
-import appConfigs from '../non-modules/helper/configs';
+import {
+  CONFIGURATION_PROVIDE_TOKEN,
+  IAppConfig,
+} from '../app-config/app-config.module';
 
 @Injectable()
 @catchFailedQueryClass(__filename)
@@ -22,6 +25,8 @@ export class AccountService {
   constructor(
     @InjectRepository(Account)
     private accountRepo: Repository<Account>,
+    @Inject(CONFIGURATION_PROVIDE_TOKEN)
+    private appConfigs: IAppConfig,
   ) {}
 
   private async hashPassword(toBeHashed: string): Promise<string> {
@@ -144,7 +149,7 @@ export class AccountService {
           : '',
         name: thisUser.fromDepartment.name ? thisUser.fromDepartment.name : '',
       },
-      expiredAt: new Date(Date.now() + appConfigs.sessionExpire),
+      expiredAt: new Date(Date.now() + this.appConfigs.sessionExpire),
     };
 
     const sessionKey = (

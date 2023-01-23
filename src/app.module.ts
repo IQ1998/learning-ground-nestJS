@@ -19,6 +19,7 @@ import { RoleModule } from './role/role.module';
 import RegisPeriod from './regis-period/regis-period.entity';
 import DepartmentRegis from './department-regis/department-regis.entity';
 import Role from './role/role.entity';
+import { AppConfigModule } from './app-config/app-config.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import Role from './role/role.entity';
     RegisPeriodModule,
     DepartmentRegisModule,
     RoleModule,
+    AppConfigModule.register(),
   ],
   controllers: [AppController],
   providers: [AppService],

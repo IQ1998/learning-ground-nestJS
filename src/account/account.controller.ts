@@ -4,6 +4,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Inject,
   Param,
   Patch,
   Post,
@@ -12,17 +13,24 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { cookieKey, IlistQueryOptions, LOGIN_RESULT } from './account.constant';
+import { IlistQueryOptions, LOGIN_RESULT } from './account.constant';
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dtos/create-account.dto';
 import { LoginDto } from './dtos/login.dto';
 import { UpdateAccounttDto } from './dtos/update-account.dto';
 import appSession from '../non-modules/helper/session';
 import { CustomRequest } from '../non-modules/typing/class.typing';
+import {
+  CONFIGURATION_PROVIDE_TOKEN,
+  IAppConfig,
+} from '../app-config/app-config.module';
 
 @Controller('api/account')
 export class AccountController {
-  constructor(private accountService: AccountService) {}
+  constructor(
+    private accountService: AccountService,
+    @Inject(CONFIGURATION_PROVIDE_TOKEN) private appConfig: IAppConfig,
+  ) {}
 
   @Post()
   createAccountRoute(@Body() body: CreateAccountDto) {
@@ -42,7 +50,7 @@ export class AccountController {
       case LOGIN_RESULT.SUCCESS:
         const { key, payload } = loginResult.sessionInfo;
         appSession.setSession(key, payload);
-        res.cookie(cookieKey, key, {
+        res.cookie(this.appConfig.cookieKey, key, {
           // ENV
           // expires: new Date(Date.now() + appConfigs.sessionExpire),
           expires: new Date(Date.now() + 30000),

@@ -31,6 +31,3 @@ export interface ISessionPayload {
   };
   expiredAt: Date;
 }
-
-// This should be in an ENV variable
-export const cookieKey = 'zVHm8Wq8OXoc227AfmS8';
