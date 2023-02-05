@@ -1,5 +1,6 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 
 export function mainConfig(app: INestApplication) {
   app.useGlobalPipes(new ValidationPipe());
@@ -11,5 +12,7 @@ export function mainConfig(app: INestApplication) {
       forbidUnknownValues: true,
     }),
   );
+  app.enableCors();
   app.use(cookieParser());
+  app.use(helmet());
 }

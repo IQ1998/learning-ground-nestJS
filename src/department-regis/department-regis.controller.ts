@@ -33,6 +33,7 @@ export class DepartmentRegisController {
   }
 
   @Get()
+  @SetMetadata(RoleKey, [RoleCode.user])
   listDepartmentRegisRoute(@Query() queryOptions: IlistQueryOptions) {
     return this.departmentRegisService.findMany(queryOptions);
   }
