@@ -15,7 +15,8 @@ import { CreateDepartmentRegisDto } from './dtos/create-department-regis.dto';
 import { UpdateDepartmentRegisDto } from './dtos/update-department-regis.dto';
 import { IlistQueryOptions } from './department-regis.constant';
 import { DepartmentRegisService } from './department-regis.service';
-import { RoleCode, RoleGuard, RoleKey } from '../role/role.guard';
+import { RoleGuard, RoleKey } from '../role/role.guard';
+import { RoleCode } from '../role/role.constant';
 
 @Controller('api/departmentRegis')
 @UseGuards(RoleGuard)

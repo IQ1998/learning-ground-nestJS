@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import Department from '../department/department.entity';
 import { Repository } from 'typeorm';
@@ -23,7 +23,7 @@ export class DepartmentRegisService {
     @InjectRepository(Department)
     private departmentRepo: Repository<Department>,
 
-    // @Inject(DepartmentService)
+    @Inject(DepartmentService)
     private departmentService: DepartmentService,
   ) {}
 

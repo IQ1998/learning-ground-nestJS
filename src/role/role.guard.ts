@@ -1,14 +1,8 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { CustomRequest } from '../non-modules/typing/class.typing';
+import { RoleCode } from './role.constant';
 import { RoleService } from './role.service';
-
-export enum RoleCode {
-  chief = 'CHIEF',
-  staff = 'STAFF',
-  admin = 'ADMIN',
-  user = 'user',
-}
 
 export const RoleKey = 'ROLE_KEY';
 

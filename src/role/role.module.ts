@@ -12,4 +12,8 @@ import { RoleService } from './role.service';
   imports: [TypeOrmModule.forFeature([Role])],
   exports: [RoleGuard, RoleService],
 })
-export class RoleModule {}
+export class RoleModule {
+  constructor() {
+    console.log('Role module is instantiated');
+  }
+}

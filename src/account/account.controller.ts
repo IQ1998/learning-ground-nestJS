@@ -69,12 +69,12 @@ export class AccountController {
   }
 
   @Get()
-  listDepartmentRoute(@Query() queryOptions: IlistQueryOptions) {
+  listAccount(@Query() queryOptions: IlistQueryOptions) {
     return this.accountService.findMany(queryOptions);
   }
 
   @Get(':id')
-  async findOneDepartmentRoute(@Param('id') id: string) {
+  async findOneAccount(@Param('id') id: string) {
     const foundAccount = await this.accountService.findOne(id);
     if (!foundAccount) {
       throw new HttpException('Account does not exist', HttpStatus.NOT_FOUND);
@@ -83,7 +83,7 @@ export class AccountController {
   }
 
   @Patch(':id')
-  async updateDepartmentRoute(
+  async updateAccount(
     @Param('id') id: string,
     @Body() UpdateAccounttDto: UpdateAccounttDto,
     @Request() req: CustomRequest,
