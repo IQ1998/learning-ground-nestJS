@@ -74,7 +74,7 @@ export class AccountService {
       .createQueryBuilder('ACCOUNT')
       .offset(skip)
       .limit(take)
-      .orderBy('ACCOUNT.createdAt', 'DESC')
+      .orderBy('ACCOUNTS.createdAt', 'DESC')
       .where(`ACCOUNT.status ${status ? '= :status' : 'IS NOT NULL'}`, {
         status,
       });

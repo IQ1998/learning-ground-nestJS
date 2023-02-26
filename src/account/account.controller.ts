@@ -24,6 +24,8 @@ import {
   CONFIGURATION_PROVIDE_TOKEN,
   IAppConfig,
 } from '../app-config/app-config.module';
+import { ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { FailedQueryExceptionDto } from '../non-modules/customExceptions/failed-query.exception';
 
 @Controller('api/account')
 export class AccountController {
@@ -69,6 +71,30 @@ export class AccountController {
   }
 
   @Get()
+  @ApiQuery({
+    schema: {
+      type: 'object',
+      properties: {
+        skip: {
+          type: 'string',
+          description: 'Number of records to be skipped (offset)',
+        },
+        take: {
+          type: 'string',
+        },
+        searchTerm: {
+          type: 'string',
+        },
+        status: {
+          type: 'string',
+        },
+      },
+    },
+    name: 'List account query',
+    required: false,
+  })
+  @ApiResponse({ status: 200, type: CreateAccountDto, isArray: true })
+  @ApiResponse({ status: 500, type: FailedQueryExceptionDto })
   listAccount(@Query() queryOptions: IlistQueryOptions) {
     return this.accountService.findMany(queryOptions);
   }
