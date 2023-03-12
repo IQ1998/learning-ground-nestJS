@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
+    <script>
+      const socket = io('http://localhost:3000');
+      socket.on('connect', function() {
+        console.log('Connected');
+        socket.emit('progress-bar', { test: 'test' });
+        socket.emit('events', { test: 'test' });
+        socket.emit('identity', 0, response =>
+          console.log('Identity:', response),
+        );
+        socket.emit('throw-exception', 1, response => {
+          console.log('🚀 ~ file: socket-client.html:14 ~ socket.on ~ response:', response);
+        })
+      });
+      socket.on('progress-bar', function(data) {
+        console.log('Current progress', `${data}%`);
+      });
+      socket.on('progress', function(data) {
+        console.log('event', data);
+      });
+      socket.on('events', function(data) {
+        console.log('event Events', data);
+      });
+      socket.on('exception', function(data) {
+        console.log('event', data);
+      });
+      socket.on('disconnect', function() {
+        console.log('Disconnected');
+      });
+    </script>
+  </head>
+
+  <body></body>
+</html>

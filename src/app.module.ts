@@ -20,6 +20,7 @@ import RegisPeriod from './regis-period/regis-period.entity';
 import DepartmentRegis from './department-regis/department-regis.entity';
 import Role from './role/role.entity';
 import { AppConfigModule } from './app-config/app-config.module';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AppConfigModule } from './app-config/app-config.module';
     DepartmentRegisModule,
     RoleModule,
     AppConfigModule.register(),
+    SocketModule,
   ],
   controllers: [AppController],
   providers: [AppService],
